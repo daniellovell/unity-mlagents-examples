@@ -1,0 +1,6 @@
+venv/
+summaries/
+
+*.ckpt*
+*.pb
+checkpoint
