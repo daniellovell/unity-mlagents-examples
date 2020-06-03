@@ -13,9 +13,11 @@ public class RTSMasterAgent : Agent
     public int healthMax = 10;
 
     public RTSUnit unit;
-    public RTSUnit enemyUnit;
+    public Transform enemyUnit;
     public int actionSpaceScale;
+    public Transform obstacle;
 
+    public float rewardMax;
 
     [HideInInspector]
     public RTSGridObserver rtsGridObserver;
@@ -43,7 +45,10 @@ public class RTSMasterAgent : Agent
         health = healthMax;
 
         unit.transform.localPosition = new Vector3(Random.value * 14 - 7, 0.0f, Random.value * 14 - 7);
-        enemyUnit.transform.localPosition = new Vector3(Random.value * 14 - 7, 0.0f, Random.value * 14 - 7);
+        enemyUnit.localPosition = new Vector3(Random.value * 14 - 7, 0.0f, Random.value * 14 - 7);
+        obstacle.transform.localPosition = new Vector3(Random.value * 14 - 7, 0.0f, Random.value * 14 - 7);
+        obstacle.transform.localRotation = Quaternion.Euler(0, Random.value * 360, 0);
+
     }
 
     public override void Heuristic(float[] actionsOut)
@@ -67,7 +72,9 @@ public class RTSMasterAgent : Agent
     public void HitEnemy(RTSUnit enemyUnit)
     {
         print("I HIT HIM");
-        AddReward(2.0f);
+        AddReward(rewardMax);
+        
+        EndEpisode();
         // enemyAgent.ReceiveDamage(1);
     }
     
@@ -75,17 +82,19 @@ public class RTSMasterAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         if (rtsGridObserver)
-            AddMatrixObservation(sensor, rtsGridObserver.dangerMatrix);  // Currently 17x17 grid
+            AddMatrixObservation(sensor, rtsGridObserver.megaMatrix);  // Currently 17x17 grid
+                //AddMatrixObservation(sensor, rtsGridObserver.obstacleMatrix);
     }
-    
 
-    private void AddMatrixObservation(VectorSensor sensor, List<List<float>> matrix)
+
+    private void AddMatrixObservation(VectorSensor sensor, List<List<List<float>>> matrix)
     {
-        foreach(List<float> lf in matrix)
+        for(int r = 0; r < rtsGridObserver.numGridsPerSide; r++)
         {
-            foreach(float f in lf)
+            for (int c = 0; c < rtsGridObserver.numGridsPerSide; c++)
             {
-                sensor.AddObservation(f);
+                sensor.AddObservation(matrix[(int) ObservationType.Danger][r][c]);
+                sensor.AddObservation(matrix[(int) ObservationType.Obstacle][r][c]);
             }
         }
     }
@@ -110,6 +119,6 @@ public class RTSMasterAgent : Agent
         //int unitSelectIndex = Mathf.Min(Mathf.Max((int)action[2], 0), numUnits - 1);
         //units[unitSelectIndex].GetComponent<NavMeshAgent>.SetDestination();
 
-        AddReward(-0.002f);
+        AddReward(-rewardMax / MaxStep );
     }
 }

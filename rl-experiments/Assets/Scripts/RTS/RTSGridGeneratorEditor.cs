@@ -11,13 +11,13 @@ public class RTSGridGeneratorEditor : Editor
     public override void OnInspectorGUI()
     {
 
-        if (GUILayout.Button("Generate Cover"))
+        if (GUILayout.Button("Generate Grid"))
         {
             RTSGridGenerator myScript = (RTSGridGenerator)target;
             myScript.GenerateGrid();
         }
 
-        if (GUILayout.Button("Delete Cover"))
+        if (GUILayout.Button("Delete Grid"))
         {
             RTSGridGenerator myScript = (RTSGridGenerator)target;
             myScript.DeleteGrid();

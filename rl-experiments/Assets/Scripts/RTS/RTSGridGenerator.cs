@@ -56,7 +56,10 @@ public class RTSGridGenerator : MonoBehaviour
                 {
                     goCell.OnUnitEnter += rG.RegisterUnitEnter;
                     goCell.OnUnitExit += rG.RegisterUnitExit;
+                    goCell.OnObstacleEnter += rG.RegisterObstacleEnter;
+                    goCell.OnObstacleExit += rG.RegisterObstacleExit;
                 }
+
                 grid1D.Add(go);
             }
         }

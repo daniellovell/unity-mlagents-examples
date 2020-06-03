@@ -23,7 +23,7 @@ public class RTSUnit : MonoBehaviour
     {
         RTSUnit otherUnit = other.GetComponent<RTSUnit>();
 
-        if (otherUnit && otherUnit.teamID != teamID)
+        if (other.tag == "Finish")
         {
             parentMasterAgent.HitEnemy(otherUnit);
         }
