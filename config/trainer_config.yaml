@@ -34,3 +34,18 @@ GladiatorAgentBurstV3:
         save_steps: 50000
         swap_steps: 50000
         team_change: 200000
+
+RTSAgent:
+    batch_size: 32
+    normalize: false
+    num_layers: 1
+    hidden_units: 256
+    beta: 5.0e-3
+    buffer_size: 256
+    max_steps: 500000
+    summary_freq: 5000
+    time_horizon: 5
+    reward_signals:
+        extrinsic:
+            strength: 1.0
+            gamma: 0.9

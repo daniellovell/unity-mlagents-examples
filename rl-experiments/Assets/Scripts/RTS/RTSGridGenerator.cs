@@ -73,7 +73,10 @@ public class RTSGridGenerator : MonoBehaviour
         }
 
         DestroyImmediate(_parentObject);
+        colliderGrid.Clear();
         colliderGrid = new List<List<BoxCollider>>();
+        grid1D.Clear();
+        grid1D = new List<GameObject>();
     }
     
 }
