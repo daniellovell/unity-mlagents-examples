@@ -17,8 +17,9 @@ public class RTSGridGenerator : MonoBehaviour
     {
         DeleteGrid();
         _parentObject = new GameObject("ColliderGrid");
-        _parentObject.transform.position = Vector3.zero;
-        _parentObject.transform.parent = transform;
+                _parentObject.transform.parent = transform;
+        _parentObject.transform.localPosition = Vector3.zero;
+
 
         // The parent object of all the cells will contain the same number 
         // of RTSGridObserver components as there are teams 
@@ -43,7 +44,7 @@ public class RTSGridGenerator : MonoBehaviour
             {
                 GameObject go = new GameObject("Cell [" + r.ToString() + "," + c.ToString() + "]");
                 go.transform.parent = _parentObject.transform;
-                go.transform.position = new Vector3(-(length / 2) + (dGrid * r), 0f, -(length / 2) + (dGrid * c));
+                go.transform.position = new Vector3(-(length / 2f) + (dGrid / 2f) + (dGrid * r), 0f, -(length / 2f) + (dGrid / 2f) + (dGrid * c));
                 go.AddComponent<BoxCollider>().size = new Vector3(dGrid, 30f, dGrid);
 
                 RTSCell goCell = go.AddComponent<RTSCell>();
