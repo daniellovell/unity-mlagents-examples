@@ -19,25 +19,16 @@ public class RTSMasterAgent : Agent
 
     public float rewardMax;
 
-    [HideInInspector]
     public RTSGridObserver rtsGridObserver;
+    public RTSGridGenerator rtsGridGenerator;
 
     // Update is called before the first frame update
     void Start()
     {
-        RTSGridObserver[] gridObservers = FindObjectsOfType<RTSGridObserver>();
-        foreach(RTSGridObserver rgo in gridObservers)
-        {
-            if(rgo.teamID == this.teamID)
-            {
-                rtsGridObserver = rgo;
-                break;
-            }
-        }
         if (!rtsGridObserver)
         {
             throw new System.NullReferenceException("No RTSGridObserver with matching team ID to " + teamID.ToString() + " ur fukt");
-        }
+        } 
     }
 
     public override void OnEpisodeBegin()
@@ -83,7 +74,6 @@ public class RTSMasterAgent : Agent
     {
         if (rtsGridObserver)
             AddMatrixObservation(sensor, rtsGridObserver.megaMatrix);  // Currently 17x17 grid
-                //AddMatrixObservation(sensor, rtsGridObserver.obstacleMatrix);
     }
 
 
@@ -101,7 +91,6 @@ public class RTSMasterAgent : Agent
 
     public override void OnActionReceived(float[] action)
     {
-        RTSGridGenerator rtsGridGen;
 
         int actionType = (int) action[0];
         int destCellIdx = (int) action[1];
@@ -110,8 +99,7 @@ public class RTSMasterAgent : Agent
         switch (actionType)
         {
             case 1:
-                rtsGridGen = FindObjectOfType<RTSGridGenerator>();
-                unit.SetDestination(rtsGridGen.grid1D[destCellIdx].transform.position);
+                unit.SetDestination(rtsGridGenerator.grid1D[destCellIdx].transform.position);
                 print("Destination Index: " + destCellIdx.ToString());
                 break;
         }
