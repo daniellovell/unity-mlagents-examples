@@ -22,6 +22,8 @@ public class RTSMasterAgent : Agent
     public RTSGridObserver rtsGridObserver;
     public RTSGridGenerator rtsGridGenerator;
 
+    float lastDist;
+
     // Update is called before the first frame update
     void Start()
     {
@@ -34,6 +36,7 @@ public class RTSMasterAgent : Agent
     public override void OnEpisodeBegin()
     {
         health = healthMax;
+        lastDist = 1000f;
 
         unit.transform.localPosition = new Vector3(Random.value * 14 - 7, 0.0f, Random.value * 14 - 7);
         enemyUnit.localPosition = new Vector3(Random.value * 14 - 7, 0.0f, Random.value * 14 - 7);
@@ -62,7 +65,6 @@ public class RTSMasterAgent : Agent
 
     public void HitEnemy(RTSUnit enemyUnit)
     {
-        print("I HIT HIM");
         AddReward(rewardMax);
         
         EndEpisode();
@@ -84,7 +86,6 @@ public class RTSMasterAgent : Agent
             for (int c = 0; c < rtsGridObserver.numGridsPerSide; c++)
             {
                 sensor.AddObservation(matrix[(int) ObservationType.Danger][r][c]);
-                sensor.AddObservation(matrix[(int) ObservationType.Obstacle][r][c]);
             }
         }
     }
@@ -98,9 +99,18 @@ public class RTSMasterAgent : Agent
 
         switch (actionType)
         {
+            case 0:
+                float d = (enemyUnit.position - transform.position).sqrMagnitude;
+                if(d < lastDist)
+                {
+                    AddReward(0.1f);
+                }
+                lastDist = d;
+                break;
             case 1:
-                unit.SetDestination(rtsGridGenerator.grid1D[destCellIdx].transform.position);
-                print("Destination Index: " + destCellIdx.ToString());
+                Vector3 dest = rtsGridGenerator.grid1D[destCellIdx].transform.position;
+                unit.SetDestination(dest);
+                //AddReward(-1f);
                 break;
         }
 

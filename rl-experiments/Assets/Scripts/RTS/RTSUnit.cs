@@ -31,7 +31,7 @@ public class RTSUnit : MonoBehaviour
 
     public void SetDestination(Vector3 destination)
     {
-        print(destination.x.ToString() + "   " + destination.z.ToString());
+        //print(destination.x.ToString() + "   " + destination.z.ToString());
         navAgent.SetDestination(destination);
     }
 
