@@ -16,8 +16,8 @@ public class RTSGridObserver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        megaMatrix = new List<List<List<float>>>(2); //bigbrain
         int obsTypeCount = Enum.GetNames(typeof(ObservationType)).Length;
+        megaMatrix = new List<List<List<float>>>(obsTypeCount); //bigbrain
 
         for (int i = 0; i < obsTypeCount; i++)
         {
@@ -29,37 +29,36 @@ public class RTSGridObserver : MonoBehaviour
                     megaMatrix[i][r].Add(0f);
             }
         }
-
     }
 
     public void RegisterUnitEnter(int teamID, int row, int col)
     {
-        print("RegisterUnitEnter");
+        //print("RegisterUnitEnter");
         if (teamID == this.teamID)
-            megaMatrix[(int)ObservationType.Danger][row][col] += 1;
-        else
             megaMatrix[(int)ObservationType.Danger][row][col] -= 1;
+        else
+            megaMatrix[(int)ObservationType.Danger][row][col] += 1;
         
     }
 
     public void RegisterUnitExit(int teamID, int row, int col)
     {
-        print("RegisterUnitExit");
+        //print("RegisterUnitExit");
         if (teamID == this.teamID)
-            megaMatrix[(int)ObservationType.Danger][row][col] -= 1;
-        else
             megaMatrix[(int)ObservationType.Danger][row][col] += 1;
+        else
+            megaMatrix[(int)ObservationType.Danger][row][col] -= 1;
     }
 
     public void RegisterObstacleEnter(int row, int col)
     {
-        print("RegisterObstacleEnter");
+        //print("RegisterObstacleEnter");
         megaMatrix[(int)ObservationType.Obstacle][row][col] = 1;
     }
 
     public void RegisterObstacleExit(int row, int col)
     {
-        print("RegisterObstacleExit");
+        //print("RegisterObstacleExit");
         megaMatrix[(int)ObservationType.Obstacle][row][col] = 0;
     }
 }
